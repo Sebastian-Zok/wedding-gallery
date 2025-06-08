@@ -31,7 +31,7 @@ export default function Galerie() {
           Letzte 10 Bilder
         </h2>
         <button
-          onClick={() => window.open(process.env.GOOGLE_DRIVE_SHARE_LINK)}
+          onClick={() => window.open(process.env.NEXT_PUBLIC_GOOGLE_DRIVE_SHARE_LINK)}
           className="cursor-pointer inline-block bg-[#9f8c6c] hover:bg-[#8d795f] text-white px-5 py-3 text-sm font-semibold tracking-wider uppercase rounded text-center"
           type="button"
         >
