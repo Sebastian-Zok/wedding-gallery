@@ -5,13 +5,13 @@ export default function Header() {
       <div className="flex flex-col justify-center items-center md:items-start text-center md:text-left space-y-4 max-w-xl mx-auto">
         <div className="text-2xl">👰🤵</div>
         <p className="text-sm tracking-widest text-gray-500 uppercase">
-          Katrin & Michelle Hochzeit
+          Katrin & Michele Hochzeit
         </p>
         <h1 className="text-4xl font-serif text-gray-800 leading-tight">
           Unser besonderer Tag
         </h1>
         <p className="text-gray-600 uppercase tracking-wider text-sm">
-          8. Juni 2025
+          14. Juni 2025
         </p>
       </div>
 
@@ -19,7 +19,7 @@ export default function Header() {
       <div className="flex justify-center items-center">
         <img
           src="/km.jpg"
-          alt="Katrin & Michelle"
+          alt="Katrin & Michele"
           className="w-full max-w-xs md:max-w-sm h-auto object-cover rounded-xl shadow-inner"
         />
       </div>

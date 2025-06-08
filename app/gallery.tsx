@@ -30,14 +30,13 @@ export default function Galerie() {
         <h2 className="text-2xl sm:text-3xl font-serif text-black text-center sm:text-left">
           Letzte 10 Bilder
         </h2>
-        <a
-          href={process.env.GOOGLE_DRIVE_SHARE_LINK}
-          className="inline-block bg-[#9f8c6c] hover:bg-[#8d795f] text-white px-5 py-3 text-sm font-semibold tracking-wider uppercase rounded text-center"
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          onClick={() => window.open(process.env.GOOGLE_DRIVE_SHARE_LINK, "_blank")}
+          className="cursor-pointer inline-block bg-[#9f8c6c] hover:bg-[#8d795f] text-white px-5 py-3 text-sm font-semibold tracking-wider uppercase rounded text-center"
+          type="button"
         >
           Komplette Galerie ansehen
-        </a>
+        </button>
       </div>
       {images.length === 0 ? (
         <p className="text-center text-gray-500">
