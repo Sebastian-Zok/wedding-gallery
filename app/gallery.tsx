@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 type ImageFile = {
   id: string;
   name: string;
-  thumbnailLink: string;
   webViewLink: string;
 };
 
@@ -26,22 +25,39 @@ export default function Galerie() {
   }, []);
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 p-4">
-      <h2 className="col-span-full text-xl font-bold mb-4">Galerie</h2>
-      {images.map((img) => (
+    <section className="max-w-6xl mx-auto px-4 py-12" id="galerie">
+      <div className="flex items-center justify-between mb-10">
+        <h2 className="text-3xl font-serif text-black">Letzte 10 Bilder </h2>
         <a
-          key={img.id}
-          href={img.webViewLink}
-          target="_blank"
-          rel="noopener noreferrer"
+          href="https://drive.google.com/drive/folders/15NdKLyfg5SWFoaSS8U7V1luDWuR_k-AK"
+          className="inline-block bg-[#9f8c6c] hover:bg-[#8d795f] text-white px-5 py-3 text-sm font-semibold tracking-wider uppercase rounded"
         >
-          <img
-            src={`/api/image-proxy?id=${img.id}`}
-            alt={img.name}
-            className="rounded shadow"
-          />
+          Komplette Galerie ansehen
         </a>
-      ))}
-    </div>
+      </div>
+      {images.length === 0 ? (
+        <p className="text-center text-gray-500">
+          Noch keine Bilder hochgeladen.
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {images.map((img) => (
+            <a
+              key={img.id}
+              href={`https://drive.google.com/uc?id=${img.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative overflow-hidden rounded-xl shadow hover:shadow-lg transition"
+            >
+              <img
+                src={`/api/image-proxy?id=${img.id}`}
+                alt={img.name}
+                className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </a>
+          ))}
+        </div>
+      )}
+    </section>
   );
 }
