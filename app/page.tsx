@@ -42,11 +42,11 @@ export default function Home() {
     <main className="min-h-screen p-4 sm:p-8 text-center">
       <Header />
       <h1 className="text-3xl sm:text-4xl font-serif text-gray-800 mb-2">
-        💍 Hochzeitsfotos teilen
+        Hochzeitsfotos teilen
       </h1>
       <p className="text-base sm:text-lg text-gray-700 mb-6">
         Teile deine schönsten Erinnerungen mit uns – direkt vom Handy oder
-        Laptop 💖
+        Laptop
       </p>
       <form
         onSubmit={handleUpload}
