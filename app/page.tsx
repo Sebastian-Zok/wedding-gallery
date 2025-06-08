@@ -4,37 +4,72 @@ import { useState, useRef } from "react";
 import Galerie from "./gallery";
 import Header from "./header";
 
+type FileWithStatus = {
+  file: File;
+  status: "pending" | "uploading" | "success" | "error";
+};
+
 export default function Home() {
-  const [status, setStatus] = useState("");
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<FileWithStatus[]>([]);
+  const [globalStatus, setGlobalStatus] = useState("");
   const galerieRef = useRef<{ refresh: () => void }>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
-    setSelectedFiles(Array.from(files));
+    setSelectedFiles(
+      Array.from(files).map((file) => ({ file, status: "pending" }))
+    );
   };
 
   const handleUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (selectedFiles.length === 0)
-      return setStatus("Bitte zuerst Dateien auswählen");
+    if (selectedFiles.length === 0) {
+      setGlobalStatus("Bitte zuerst Dateien auswählen");
+      return;
+    }
+    setGlobalStatus("");
+    let anySuccess = false;
 
-    setStatus("Hochladen…");
+    // Upload jede Datei einzeln
+    const updatedFiles = await Promise.all(
+      selectedFiles.map(async (item, idx) => {
+        let newStatus: FileWithStatus["status"] = "uploading";
+        setSelectedFiles((prev) =>
+          prev.map((f, i) => (i === idx ? { ...f, status: "uploading" } : f))
+        );
+        const formData = new FormData();
+        formData.append("file", item.file);
 
-    const formData = new FormData();
-    selectedFiles.forEach((file) => formData.append("file", file));
+        try {
+          const res = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
+          });
+          if (res.ok) {
+            newStatus = "success";
+            anySuccess = true;
+          } else {
+            newStatus = "error";
+          }
+        } catch {
+          newStatus = "error";
+        }
+        setSelectedFiles((prev) =>
+          prev.map((f, i) => (i === idx ? { ...f, status: newStatus } : f))
+        );
+        return { ...item, status: newStatus };
+      })
+    );
 
-    const res = await fetch("/api/upload", {
-      method: "POST",
-      body: formData,
-    });
-
-    setStatus(res.ok ? "🎉 Erfolgreich hochgeladen!" : "❌ Fehler beim Upload");
-    if (res.ok) {
-      galerieRef.current?.refresh(); // Galerie neu laden
-
-      setSelectedFiles([]);
+    if (anySuccess) {
+      setGlobalStatus("🎉 Erfolgreich hochgeladen!");
+      setTimeout(() => {
+        setSelectedFiles([]);
+        galerieRef.current?.refresh();
+      }, 1000);
+    } else {
+      setGlobalStatus("❌ Fehler beim Upload");
     }
   };
 
@@ -45,8 +80,7 @@ export default function Home() {
         Hochzeitsfotos teilen
       </h1>
       <p className="text-base sm:text-lg text-gray-700 mb-6">
-        Teile deine schönsten Erinnerungen mit uns – direkt vom Handy oder
-        Laptop
+        Teile deine schönsten Erinnerungen mit uns 💌
       </p>
       <form
         onSubmit={handleUpload}
@@ -74,8 +108,19 @@ export default function Home() {
           <div className="text-left text-sm text-gray-600">
             <p className="font-semibold mb-1">Ausgewählte Dateien:</p>
             <ul className="list-disc list-inside">
-              {selectedFiles.map((file, i) => (
-                <li key={i}>{file.name}</li>
+              {selectedFiles.map((item, i) => (
+                <li key={i}>
+                  {item.file.name}{" "}
+                  {item.status === "uploading" && (
+                    <span className="text-blue-500 ml-2">⏳ Hochladen…</span>
+                  )}
+                  {item.status === "success" && (
+                    <span className="text-green-600 ml-2">✔️ Erfolgreich</span>
+                  )}
+                  {item.status === "error" && (
+                    <span className="text-red-600 ml-2">❌ Fehler</span>
+                  )}
+                </li>
               ))}
             </ul>
           </div>
@@ -84,14 +129,15 @@ export default function Home() {
         <button
           className="w-full bg-[#9f8c6c] hover:bg-[#8d795f] text-white px-6 py-3 rounded-2xl shadow-md transition text-lg"
           type="submit"
+          disabled={selectedFiles.some((f) => f.status === "uploading")}
         >
           Jetzt hochladen 🕊️
         </button>
 
-        <p className="text-sm text-green-700">{status}</p>
+        <p className="text-sm text-green-700">{globalStatus}</p>
       </form>
 
-      <div id="galerie" className="mt-16">
+      <div id="galerie" className="mt-8">
         <Galerie ref={galerieRef} />
       </div>
     </main>
