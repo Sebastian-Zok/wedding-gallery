@@ -5,7 +5,7 @@ export default function Header() {
       <div className="flex flex-col justify-center items-center md:items-start text-center md:text-left space-y-4 max-w-xl mx-auto">
         <div className="text-2xl">👰🤵</div>
         <p className="text-sm tracking-widest text-gray-500 uppercase">
-          Katrin & Michele Hochzeit
+          Katrin & Michele 
         </p>
         <h1 className="text-4xl font-serif text-gray-800 leading-tight">
           Unser besonderer Tag
