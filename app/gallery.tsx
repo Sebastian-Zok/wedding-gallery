@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, forwardRef, useImperativeHandle } from "react";
 
 type ImageFile = {
   id: string;
@@ -8,20 +8,29 @@ type ImageFile = {
   webViewLink: string;
 };
 
-export default function Galerie() {
+const Galerie = forwardRef(function Galerie(_, ref) {
   const [images, setImages] = useState<ImageFile[]>([]);
 
+  const fetchImages = () => {
+    setTimeout(() => {
+      fetch("/api/images")
+        .then((res) => res.json())
+        .then((data) => {
+          if (Array.isArray(data)) {
+            setImages(data);
+          } else {
+            console.error("Antwort ist kein Array:", data);
+          }
+        })
+        .catch(console.error);
+    }, 100); // 100ms Verzögerung
+  };
+  useImperativeHandle(ref, () => ({
+    refresh: fetchImages,
+  }));
+
   useEffect(() => {
-    fetch("/api/images")
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setImages(data);
-        } else {
-          console.error("Antwort ist kein Array:", data);
-        }
-      })
-      .catch(console.error);
+    fetchImages();
   }, []);
 
   return (
@@ -31,7 +40,9 @@ export default function Galerie() {
           Letzte 10 Bilder
         </h2>
         <button
-          onClick={() => window.open(process.env.NEXT_PUBLIC_GOOGLE_DRIVE_SHARE_LINK)}
+          onClick={() =>
+            window.open(process.env.NEXT_PUBLIC_GOOGLE_DRIVE_SHARE_LINK)
+          }
           className="cursor-pointer inline-block bg-[#9f8c6c] hover:bg-[#8d795f] text-white px-5 py-3 text-sm font-semibold tracking-wider uppercase rounded text-center"
           type="button"
         >
@@ -63,4 +74,5 @@ export default function Galerie() {
       )}
     </section>
   );
-}
+});
+export default Galerie;

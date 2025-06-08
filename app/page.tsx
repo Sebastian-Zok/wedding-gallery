@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Galerie from "./gallery";
 import Header from "./header";
 
 export default function Home() {
   const [status, setStatus] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const galerieRef = useRef<{ refresh: () => void }>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -30,7 +31,11 @@ export default function Home() {
     });
 
     setStatus(res.ok ? "🎉 Erfolgreich hochgeladen!" : "❌ Fehler beim Upload");
-    if (res.ok) setSelectedFiles([]);
+    if (res.ok) {
+      galerieRef.current?.refresh(); // Galerie neu laden
+
+      setSelectedFiles([]);
+    }
   };
 
   return (
@@ -87,7 +92,7 @@ export default function Home() {
       </form>
 
       <div id="galerie" className="mt-16">
-        <Galerie />
+        <Galerie ref={galerieRef} />
       </div>
     </main>
   );
