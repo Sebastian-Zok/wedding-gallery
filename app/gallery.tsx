@@ -31,8 +31,10 @@ export default function Galerie() {
           Letzte 10 Bilder
         </h2>
         <a
-          href="https://drive.google.com/drive/folders/15NdKLyfg5SWFoaSS8U7V1luDWuR_k-AK"
+          href={process.env.GOOGLE_DRIVE_SHARE_LINK}
           className="inline-block bg-[#9f8c6c] hover:bg-[#8d795f] text-white px-5 py-3 text-sm font-semibold tracking-wider uppercase rounded text-center"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           Komplette Galerie ansehen
         </a>

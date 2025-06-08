@@ -13,12 +13,6 @@ export default function Header() {
         <p className="text-gray-600 uppercase tracking-wider text-sm">
           8. Juni 2025
         </p>
-        <a
-          href="https://drive.google.com/drive/folders/15NdKLyfg5SWFoaSS8U7V1luDWuR_k-AK"
-          className="mt-4 inline-block bg-[#9f8c6c] hover:bg-[#8d795f] text-white px-6 py-3 text-sm font-semibold tracking-wider uppercase rounded transition"
-        >
-          Galerie ansehen
-        </a>
       </div>
 
       {/* Bild */}
