@@ -26,11 +26,13 @@ export default function Galerie() {
 
   return (
     <section className="max-w-6xl mx-auto px-4 py-12" id="galerie">
-      <div className="flex items-center justify-between mb-10">
-        <h2 className="text-3xl font-serif text-black">Letzte 10 Bilder </h2>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-10 gap-4">
+        <h2 className="text-2xl sm:text-3xl font-serif text-black text-center sm:text-left">
+          Letzte 10 Bilder
+        </h2>
         <a
           href="https://drive.google.com/drive/folders/15NdKLyfg5SWFoaSS8U7V1luDWuR_k-AK"
-          className="inline-block bg-[#9f8c6c] hover:bg-[#8d795f] text-white px-5 py-3 text-sm font-semibold tracking-wider uppercase rounded"
+          className="inline-block bg-[#9f8c6c] hover:bg-[#8d795f] text-white px-5 py-3 text-sm font-semibold tracking-wider uppercase rounded text-center"
         >
           Komplette Galerie ansehen
         </a>
@@ -40,7 +42,7 @@ export default function Galerie() {
           Noch keine Bilder hochgeladen.
         </p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
           {images.map((img) => (
             <a
               key={img.id}
